@@ -13,7 +13,8 @@ module.exports = {
   ],
   plugins: ["react", "react-native", "simple-import-sort"], // add React and React Native plugins
   rules: {
-    "prettier/prettier": [ // Prettier rules
+    "prettier/prettier": [
+      // Prettier rules
       "warn",
       {
         usePrettierrc: true
@@ -38,11 +39,11 @@ module.exports = {
           // Parent imports. Put `..` last.
           ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
           // Other relative imports. Put same-folder imports and `.` last.
-          ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+          ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"]
         ]
       }
     ],
-    "camelcase": "off", // disable camelcase rule
+    camelcase: "off", // disable camelcase rule
     "@typescript-eslint/no-explicit-any": "warn"
   }
 };
