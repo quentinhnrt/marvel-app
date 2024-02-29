@@ -1,19 +1,43 @@
+import { Ionicons } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import HomeScreen from "~/screens/AppScreens/HomeScreen";
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName = "";
+
+            switch (route.name) {
+              case "Home":
+                iconName = focused ? "home" : "home-outline";
+                break;
+            }
+
+            return (
+              <Ionicons
+                name={iconName as "key"}
+                size={size}
+                color={color}
+              />
+            );
+          },
+          tabBarActiveTintColor: "black",
+          tabBarInactiveTintColor: "gray",
+          headerShown: false
+        })}
+      >
+        <Tab.Screen
           name="Home"
           component={HomeScreen}
         />
-      </Stack.Navigator>
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }

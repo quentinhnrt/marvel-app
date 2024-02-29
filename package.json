@@ -10,6 +10,8 @@
     "lint": "eslint --fix --ignore-path .gitignore --ext .js,.ts,.tsx ."
   },
   "dependencies": {
+    "@expo/vector-icons": "^14.0.0",
+    "@react-navigation/bottom-tabs": "^6.5.16",
     "@react-navigation/native": "^6.1.14",
     "@react-navigation/native-stack": "^6.9.22",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
