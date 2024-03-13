@@ -21,6 +21,28 @@ export default class MarvelApiHelper {
     return await response.json();
   }
 
+  async getFilteredCharacters({ orderBy, nameStartsWith }) {
+    if (!orderBy) orderBy = "name";
+
+    const hash = this._getHash();
+    let url =
+      "https://gateway.marvel.com/v1/public/characters?apikey=" +
+      this.publicKey +
+      "&ts=" +
+      this.ts +
+      "&hash=" +
+      hash +
+      "&orderBy=" +
+      orderBy;
+
+    if (nameStartsWith) {
+      url += "&nameStartsWith=" + nameStartsWith;
+    }
+    const response = await fetch(url);
+
+    return await response.json();
+  }
+
   private _getHash() {
     return md5(this.ts + this.privateKey + this.publicKey);
   }
