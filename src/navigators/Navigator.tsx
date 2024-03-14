@@ -4,7 +4,7 @@ import GuestNavigator from "./GuestNavigator";
 import { useAuthContext } from "~/contexts/AuthContext";
 
 export default function Navigator() {
-  const { isSignedIn } = useAuthContext();
+  const { user } = useAuthContext();
 
-  return isSignedIn ? <AppNavigator /> : <GuestNavigator />;
+  return user ? <AppNavigator /> : <GuestNavigator />;
 }
