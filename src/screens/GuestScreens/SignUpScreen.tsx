@@ -7,13 +7,13 @@ export default function SignUpScreen() {
   const { register, processing, error } = useAuthContext();
   const [email, setEmail] = useState("quentin.honnart@gmail.com");
   const [password, setPassword] = useState("Q781227n.");
-  const [username, setUsername] = useState("quentinhnrt");
+  const [name, setName] = useState("quentinhnrt");
 
   function handleRegister() {
     if (processing) {
       return;
     }
-    register({ username, email, password });
+    register({ name, email, password });
   }
   return (
     <SafeAreaView>
@@ -28,8 +28,8 @@ export default function SignUpScreen() {
         <TextInput
           mode="outlined"
           placeholder="Type your username"
-          value={username}
-          onChange={(text) => setUsername(text.nativeEvent.text)}
+          value={name}
+          onChange={(text) => setName(text.nativeEvent.text)}
         />
         <TextInput
           mode="outlined"

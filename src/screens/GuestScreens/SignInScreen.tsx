@@ -6,12 +6,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthContext } from "~/contexts/AuthContext";
 
 export default function SignInScreen() {
-  const { signIn } = useAuthContext();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { signIn, processing, error } = useAuthContext();
+  const [email, setEmail] = useState("quentin.honnart@gmail.com");
+  const [password, setPassword] = useState("Q781227n.");
 
   function handleLogin() {
-    console.log("test");
+    if (processing) {
+      return;
+    }
+
+    signIn({ email, password });
   }
 
   return (
@@ -23,14 +27,20 @@ export default function SignInScreen() {
         >
           Sign In
         </Text>
+        <Text className="text-center my-4 text-red-500">{error}</Text>
         <TextInput
           mode="outlined"
           placeholder="Type your email"
+          keyboardType="email-address"
+          onChange={(e) => setEmail(e.nativeEvent.text)}
+          value={email}
         />
         <TextInput
           mode="outlined"
           placeholder="Type your password"
           secureTextEntry
+          onChange={(e) => setPassword(e.nativeEvent.text)}
+          value={password}
         />
         <Button
           mode="contained"

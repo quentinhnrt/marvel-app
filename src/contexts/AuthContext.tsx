@@ -7,7 +7,7 @@ type SignInParams = {
 };
 
 type RegisterParams = {
-  username: string;
+  name: string;
   email: string;
   password: string;
 };
@@ -15,7 +15,7 @@ type RegisterParams = {
 const AuthContext = createContext({
   isSignedIn: false,
   signIn: ({ email, password }: SignInParams) => {},
-  register: ({ username, email, password }: RegisterParams) => {},
+  register: ({ name, email, password }: RegisterParams) => {},
   processing: false,
   error: null as null | string,
   user: null as null | object
@@ -46,37 +46,51 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const isSignedIn = !!token;
 
-  const signIn = ({ email, password }: SignInParams) => {
-    fetch(`${apiURL}/login`, {
+  const signIn = async ({ email, password }: SignInParams) => {
+    setProcessing(true);
+    const response = await fetch(`${apiURL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ email, password })
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        SecureStore.setItemAsync("authToken", data.token);
-        setToken(data.token);
-      });
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      setError(data.message);
+      setProcessing(false);
+      return;
+    }
+
+    const data = await response.json();
+    setToken(data.token);
+    SecureStore.setItemAsync("authToken", data.token);
+    setProcessing(false);
   };
 
-  const register = async ({ username, email, password }: RegisterParams) => {
+  const register = async ({ name, email, password }: RegisterParams) => {
     setProcessing(true);
-    const response = await fetch(`/register`, {
+
+    const response = await fetch(`${apiURL}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ username, email, password })
-    }).catch((error) => {
-      setError(error.message || "An error occurred");
+      body: JSON.stringify({ name, email, password })
     });
-    if (response.status !== 200) {
-      setError("An error occurred");
+
+    if (!response.ok) {
+      const data = await response.json();
+      setError(data.message);
+      setProcessing(false);
+      return;
     }
 
     const data = await response.json();
+
+    setToken(data.token);
+    SecureStore.setItemAsync("authToken", data.token);
 
     setProcessing(false);
   };
