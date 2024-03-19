@@ -1,5 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
 
 type SignInParams = {
   email: string;
@@ -33,6 +36,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!token) {
+      SplashScreen.hideAsync();
       return;
     }
 
@@ -44,6 +48,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
       .then((response) => response.json())
       .then((data) => {
         setUser(data);
+        SplashScreen.hideAsync();
       });
   }, [token]);
 
