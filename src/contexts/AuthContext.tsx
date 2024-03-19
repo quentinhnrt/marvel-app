@@ -10,19 +10,22 @@ type RegisterParams = {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
 };
 
 const AuthContext = createContext({
   isSignedIn: false,
   signIn: ({ email, password }: SignInParams) => {},
-  register: ({ name, email, password }: RegisterParams) => {},
+  register: ({ name, email, password, confirmPassword }: RegisterParams) => {},
   processing: false,
   error: null as null | string,
   user: null as null | object
 });
 
 const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [token, setToken] = useState<null | string>(null);
+  const [token, setToken] = useState<null | string>(
+    SecureStore.getItem("authToken")
+  );
   const [user, setUser] = useState<null | object>(null);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<null | string>(null);
@@ -69,7 +72,12 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
     setProcessing(false);
   };
 
-  const register = async ({ name, email, password }: RegisterParams) => {
+  const register = async ({ name, email, password, confirmPassword }: RegisterParams) => {
+    if (password !== confirmPassword) {
+        setError("Passwords do not match");
+        return;
+    }
+
     setProcessing(true);
 
     const response = await fetch(`${apiURL}/register`, {
