@@ -32,7 +32,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView>
-      <View className="px-8 bg-red-200 h-full">
+      <View className="px-8 h-full">
         {isLoading ? (
           <Text>Loading...</Text>
         ) : (
