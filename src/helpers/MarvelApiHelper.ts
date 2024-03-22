@@ -1,61 +1,70 @@
-import { md5 } from "js-md5";
+import {md5} from "js-md5";
 
 export default class MarvelApiHelper {
-  private _publicKey = "d13e0c6f7c2f1d6743ceedcc4f12067f";
-  private _privateKey = "00c4d6d7ad75e82d937916d195754cf99f8a63c7";
-  private _ts = "1";
-  async getAllCharacters(offset: number = 0, limit: number = 20) {
-    const hash = this._getHash();
-    const response = await fetch(
-      "https://gateway.marvel.com/v1/public/characters?apikey=" +
-        this.publicKey +
-        "&ts=" +
-        this.ts +
-        "&hash=" +
-        hash +
-        "&offset=" +
-        offset +
-        "&limit=" +
-        limit
-    );
-    return await response.json();
-  }
+    private _publicKey = "d13e0c6f7c2f1d6743ceedcc4f12067f";
+    private _privateKey = "00c4d6d7ad75e82d937916d195754cf99f8a63c7";
+    private _ts = "1";
 
-  async getFilteredCharacters({ orderBy, nameStartsWith }) {
-    if (!orderBy) orderBy = "name";
-
-    const hash = this._getHash();
-    let url =
-      "https://gateway.marvel.com/v1/public/characters?apikey=" +
-      this.publicKey +
-      "&ts=" +
-      this.ts +
-      "&hash=" +
-      hash +
-      "&orderBy=" +
-      orderBy;
-
-    if (nameStartsWith) {
-      url += "&nameStartsWith=" + nameStartsWith;
+    async getAllCharacters(offset: number = 0, limit: number = 20) {
+        const hash = this._getHash();
+        const response = await fetch(
+            "https://gateway.marvel.com/v1/public/characters?apikey=" +
+            this.publicKey +
+            "&ts=" +
+            this.ts +
+            "&hash=" +
+            hash +
+            "&offset=" +
+            offset +
+            "&limit=" +
+            limit
+        );
+        return await response.json();
     }
-    const response = await fetch(url);
 
-    return await response.json();
-  }
+    async getFilteredCharacters({orderBy, nameStartsWith}) {
+        if (!orderBy) orderBy = "name";
 
-  private _getHash() {
-    return md5(this.ts + this.privateKey + this.publicKey);
-  }
+        const hash = this._getHash();
+        let url =
+            "https://gateway.marvel.com/v1/public/characters?apikey=" +
+            this.publicKey +
+            "&ts=" +
+            this.ts +
+            "&hash=" +
+            hash +
+            "&orderBy=" +
+            orderBy;
 
-  get publicKey() {
-    return this._publicKey;
-  }
+        if (nameStartsWith) {
+            url += "&nameStartsWith=" + nameStartsWith;
+        }
+        const response = await fetch(url);
 
-  get privateKey() {
-    return this._privateKey;
-  }
+        return await response.json();
+    }
 
-  get ts() {
-    return this._ts;
-  }
+    async getCharacter(characterId: number) {
+        const hash = this._getHash();
+        const response = await fetch(
+            `https://gateway.marvel.com/v1/public/characters/${characterId}?apikey=${this.publicKey}&ts=${this.ts}&hash=${hash}`
+        );
+        return await response.json();
+    }
+
+    private _getHash() {
+        return md5(this.ts + this.privateKey + this.publicKey);
+    }
+
+    get publicKey() {
+        return this._publicKey;
+    }
+
+    get privateKey() {
+        return this._privateKey;
+    }
+
+    get ts() {
+        return this._ts;
+    }
 }

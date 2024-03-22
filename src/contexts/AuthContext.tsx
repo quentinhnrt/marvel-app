@@ -22,7 +22,9 @@ const AuthContext = createContext({
   register: ({ name, email, password, confirmPassword }: RegisterParams) => {},
   processing: false,
   error: null as null | string,
-  user: null as null | object
+  user: null as null | object,
+  setUser: (user: object) => {},
+  token: SecureStore.getItem("authToken")
 });
 
 const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -48,6 +50,8 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
       .then((response) => response.json())
       .then((data) => {
         setUser(data);
+        SplashScreen.hideAsync();
+      }).catch((res) => {
         SplashScreen.hideAsync();
       });
   }, [token]);
@@ -110,7 +114,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ signIn, register, isSignedIn, processing, error, user }}
+      value={{ signIn, register, isSignedIn, processing, error, user, setUser, token }}
     >
       {children}
     </AuthContext.Provider>

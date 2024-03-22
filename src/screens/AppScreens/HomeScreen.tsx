@@ -40,7 +40,7 @@ export default function HomeScreen() {
             className="py-8"
             data={characters}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => <CharacterCard character={item} />}
+            renderItem={({ item }) => <CharacterCard initialCharacter={item} />}
           />
         )}
       </View>
